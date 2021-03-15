@@ -826,6 +826,24 @@ export function save_message_row_edit(row) {
     // The message will automatically get replaced via message_list.update_message.
 }
 
+export function delete_message_row_edit(row) {
+    // This function is used to remove the content of the message by editing it.
+
+    const message_id = rows.id(row);
+    const message = current_msg_list.get(message_id);
+
+    row.find(".message_edit_content").val("");
+    const new_content = row.find(".message_edit_content").val();
+
+    const request = {message_id: message.id};
+    request.content = new_content;
+
+    channel.patch({
+        url: "/json/messages/" + message.id,
+        data: request,
+    });
+}
+
 export function maybe_show_edit(row, id) {
     if (currently_editing_messages.has(id)) {
         current_msg_list.show_edit_message(row, currently_editing_messages.get(id));
